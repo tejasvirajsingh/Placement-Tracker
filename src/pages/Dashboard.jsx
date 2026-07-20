@@ -2,17 +2,31 @@ import MainLayout from "../layouts/MainLayout";
 import Card from "../components/Card";
 import ProgressCard from "../components/ProgressCard";
 import { useApp } from "../context/AppContext";
+import dsaTopics from "../data/dsaTopics";
+import aptitudeTopics from "../data/aptitudeTopics";
 
 function Dashboard() {
   const {
     dsaCompleted,
     dsaPercentage,
+
     words,
+
+    aptitudeCompleted,
+    aptitudePercentage,
   } = useApp();
 
-  const readiness = Math.min(
-    Math.round((dsaPercentage + words.length * 2) / 2),
-    100
+  // Total Aptitude Topics
+  const totalAptitudeTopics =
+    aptitudeTopics.quantitative.length +
+    aptitudeTopics.reasoning.length +
+    aptitudeTopics.verbal.length;
+
+  // Placement Readiness Formula
+  const readiness = Math.round(
+    dsaPercentage * 0.4 +
+      aptitudePercentage * 0.4 +
+      Math.min(words.length, 100) * 0.2
   );
 
   return (
@@ -42,32 +56,33 @@ function Dashboard() {
         />
 
         <Card
-          title="Words"
+          title="Words Learned"
           value={words.length}
         />
 
         <Card
           title="DSA Completed"
-          value={dsaCompleted}
+          value={`${dsaCompleted}/${dsaTopics.length}`}
         />
       </div>
 
-      {/* Progress Section */}
+      {/* Progress */}
       <h2 className="text-2xl font-bold mt-10 mb-5">
         📈 Progress
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
         <ProgressCard
           title="DSA Progress"
           completed={dsaCompleted}
-          total={16}
+          total={dsaTopics.length}
         />
 
         <ProgressCard
           title="Aptitude Progress"
-          completed={0}
-          total={18}
+          completed={aptitudeCompleted}
+          total={totalAptitudeTopics}
         />
 
         <ProgressCard
@@ -75,16 +90,20 @@ function Dashboard() {
           completed={words.length}
           total={1000}
         />
+
       </div>
 
-      {/* Goals */}
+      {/* Today's Goals */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10">
+
         <div className="bg-slate-800 rounded-xl p-6 shadow-lg">
+
           <h2 className="text-2xl font-bold mb-5">
             🎯 Today's Goal
           </h2>
 
           <div className="space-y-3">
+
             <label className="flex items-center gap-3">
               <input type="checkbox" />
               Solve 2 LeetCode Problems
@@ -104,10 +123,13 @@ function Dashboard() {
               <input type="checkbox" />
               Revise Yesterday's Topics
             </label>
+
           </div>
+
         </div>
 
         <div className="bg-slate-800 rounded-xl p-6 shadow-lg">
+
           <h2 className="text-2xl font-bold mb-5">
             🚀 Quote of the Day
           </h2>
@@ -116,21 +138,40 @@ function Dashboard() {
             "Discipline is choosing between what you want now and what you want
             most."
           </p>
+
         </div>
+
       </div>
 
       {/* Recent Activity */}
       <div className="bg-slate-800 rounded-xl p-6 shadow-lg mt-10">
+
         <h2 className="text-2xl font-bold mb-6">
           📝 Recent Activity
         </h2>
 
         <ul className="space-y-4 text-gray-300">
-          <li>✅ Completed {dsaCompleted} DSA Topics</li>
-          <li>📖 Total Words: {words.length}</li>
-          <li>🎯 Placement Readiness: {readiness}%</li>
+
+          <li>
+            ✅ Completed {dsaCompleted} DSA Topics
+          </li>
+
+          <li>
+            🧠 Completed {aptitudeCompleted} Aptitude Topics
+          </li>
+
+          <li>
+            📖 Total Words Learned: {words.length}
+          </li>
+
+          <li>
+            🎯 Placement Readiness: {readiness}%
+          </li>
+
         </ul>
+
       </div>
+
     </MainLayout>
   );
 }

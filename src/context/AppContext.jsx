@@ -1,25 +1,41 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import dsaTopics from "../data/dsaTopics";
+import aptitudeTopics from "../data/aptitudeTopics";
 
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
+  // ==========================
   // DSA Progress
+  // ==========================
   const [completedDSA, setCompletedDSA] = useState(() =>
     JSON.parse(localStorage.getItem("dsaProgress")) || {}
   );
 
+  // ==========================
   // Words
+  // ==========================
   const [words, setWords] = useState(() =>
     JSON.parse(localStorage.getItem("words")) || []
   );
 
+  // ==========================
+  // Notes
+  // ==========================
+  const [notes, setNotes] = useState(() =>
+    JSON.parse(localStorage.getItem("notes")) || []
+  );
+
+  // ==========================
   // Aptitude
+  // ==========================
   const [aptitude, setAptitude] = useState(() =>
     JSON.parse(localStorage.getItem("aptitude")) || {}
   );
 
+  // ==========================
   // Save DSA Progress
+  // ==========================
   useEffect(() => {
     localStorage.setItem(
       "dsaProgress",
@@ -27,7 +43,9 @@ export const AppProvider = ({ children }) => {
     );
   }, [completedDSA]);
 
+  // ==========================
   // Save Words
+  // ==========================
   useEffect(() => {
     localStorage.setItem(
       "words",
@@ -35,7 +53,19 @@ export const AppProvider = ({ children }) => {
     );
   }, [words]);
 
+  // ==========================
+  // Save Notes
+  // ==========================
+  useEffect(() => {
+    localStorage.setItem(
+      "notes",
+      JSON.stringify(notes)
+    );
+  }, [notes]);
+
+  // ==========================
   // Save Aptitude
+  // ==========================
   useEffect(() => {
     localStorage.setItem(
       "aptitude",
@@ -43,7 +73,9 @@ export const AppProvider = ({ children }) => {
     );
   }, [aptitude]);
 
+  // ==========================
   // DSA Statistics
+  // ==========================
   const dsaCompleted = dsaTopics.filter(
     (topic) => completedDSA[topic]
   ).length;
@@ -51,7 +83,32 @@ export const AppProvider = ({ children }) => {
   const dsaPercentage =
     dsaTopics.length === 0
       ? 0
-      : Math.round((dsaCompleted / dsaTopics.length) * 100);
+      : Math.round(
+          (dsaCompleted / dsaTopics.length) * 100
+        );
+
+  // ==========================
+  // Aptitude Statistics
+  // ==========================
+  const allAptitudeTopics = [
+    ...aptitudeTopics.quantitative,
+    ...aptitudeTopics.reasoning,
+    ...aptitudeTopics.verbal,
+  ];
+
+  const aptitudeCompleted =
+    allAptitudeTopics.filter(
+      (topic) => aptitude[topic]
+    ).length;
+
+  const aptitudePercentage =
+    allAptitudeTopics.length === 0
+      ? 0
+      : Math.round(
+          (aptitudeCompleted /
+            allAptitudeTopics.length) *
+            100
+        );
 
   return (
     <AppContext.Provider
@@ -66,9 +123,15 @@ export const AppProvider = ({ children }) => {
         words,
         setWords,
 
+        // Notes
+        notes,
+        setNotes,
+
         // Aptitude
         aptitude,
         setAptitude,
+        aptitudeCompleted,
+        aptitudePercentage,
       }}
     >
       {children}
