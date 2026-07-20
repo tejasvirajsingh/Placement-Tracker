@@ -1,41 +1,27 @@
-import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import dsaTopics from "../data/dsaTopics";
 import DSATopicCard from "../components/DSATopicCard";
+import { useApp } from "../context/AppContext";
 
 function DSA() {
-  const [completed, setCompleted] = useState({});
+  const {
+    completedDSA,
+    setCompletedDSA,
+    dsaCompleted,
+    dsaPercentage,
+  } = useApp();
 
-  // Load saved progress
-  useEffect(() => {
-    const saved = localStorage.getItem("dsaProgress");
-
-    if (saved) {
-      setCompleted(JSON.parse(saved));
-    }
-  }, []);
-
-  // Save progress whenever completed changes
-  useEffect(() => {
-    localStorage.setItem("dsaProgress", JSON.stringify(completed));
-  }, [completed]);
-
-  // Toggle checkbox
+  // Toggle Topic
   const toggleTopic = (topic) => {
-    setCompleted((prev) => ({
+    setCompletedDSA((prev) => ({
       ...prev,
       [topic]: !prev[topic],
     }));
   };
 
-  const total = dsaTopics.length;
-
-  const done = dsaTopics.filter((topic) => completed[topic]).length;
-
-  const percentage = total === 0 ? 0 : Math.round((done / total) * 100);
-
   return (
     <MainLayout>
+      {/* Heading */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold">📚 DSA Tracker</h1>
 
@@ -52,7 +38,7 @@ function DSA() {
           </h2>
 
           <span className="font-bold text-indigo-400">
-            {percentage}%
+            {dsaPercentage}%
           </span>
         </div>
 
@@ -60,23 +46,23 @@ function DSA() {
           <div
             className="bg-indigo-500 h-4 transition-all duration-500"
             style={{
-              width: `${percentage}%`,
+              width: `${dsaPercentage}%`,
             }}
           ></div>
         </div>
 
         <p className="mt-4 text-gray-400">
-          {done} / {total} Topics Completed
+          {dsaCompleted} / {dsaTopics.length} Topics Completed
         </p>
       </div>
 
-      {/* Topics */}
+      {/* DSA Topics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {dsaTopics.map((topic) => (
           <DSATopicCard
             key={topic}
             topic={topic}
-            checked={completed[topic] || false}
+            checked={completedDSA[topic] || false}
             onChange={() => toggleTopic(topic)}
           />
         ))}
