@@ -153,7 +153,7 @@ function Dashboard() {
         <ul className="space-y-4 text-gray-300">
 
           <li>
-            ✅ Completed {dsaCompleted} DSA Topics
+            ✅ Completed {dsaCompleted} DSA Topics...
           </li>
 
           <li>
