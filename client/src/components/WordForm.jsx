@@ -32,7 +32,7 @@ function WordForm({ addWord }) {
     >
 
       <h2 className="text-2xl font-bold mb-5">
-        Add New Word
+        Add Word
       </h2>
 
       <input
