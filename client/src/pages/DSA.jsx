@@ -26,7 +26,7 @@ function DSA() {
         <h1 className="text-4xl font-bold">📚 DSA Tracker</h1>
 
         <p className="text-gray-400 mt-2">
-          Track your DSA preparation.
+          Track your DSA preparation...........
         </p>
       </div>
 
