@@ -34,7 +34,7 @@ function DSA() {
       <div className="bg-slate-800 p-6 rounded-xl shadow-lg mb-8">
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-xl font-semibold">
-            Overall Progress
+            Overall Progress...
           </h2>
 
           <span className="font-bold text-indigo-400">
